@@ -20,9 +20,7 @@
                     "C:/MinGW/lib/gcc/mingw32/8.2.0/include/*",
                     "C:/MinGW/include/*"
                 ]
-            },
-            "limitSymbolsToIncludedHeaders": true,
-            "databaseFilename": ""
+            }
         }
     ],
     "version": 4
