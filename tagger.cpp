@@ -842,51 +842,51 @@ const char *getLastError() {
 
 namespace {
 int crfpp_test(const Param &param) {
-  if (param.get<bool>("version")) {
-    std::cout <<  param.version();
-    return -1;
-  }
-
-  if (param.get<bool>("help")) {
-    std::cout <<  param.help();
-    return -1;
-  }
-
-  CRFPP::TaggerImpl tagger;
-  if (!tagger.open(param)) {
-    std::cerr << tagger.what() << std::endl;
-    return -1;
-  }
-
-  std::string output = param.get<std::string>("output");
-  if (output.empty()) {
-    output = "-";
-  }
-
-  CRFPP::ostream_wrapper os(output.c_str());
-  if (!*os) {
-    std::cerr << "no such file or directory: " << output << std::endl;
-    return -1;
-  }
-
-  const std::vector<std::string>& rest_ = param.rest_args();
-  std::vector<std::string> rest = rest_;  // trivial copy
-  if (rest.empty()) {
-    rest.push_back("-");
-  }
-
-  for (size_t i = 0; i < rest.size(); ++i) {
-    CRFPP::istream_wrapper is(rest[i].c_str());
-    if (!*is) {
-      std::cerr << "no such file or directory: " << rest[i] << std::endl;
-      return -1;
+//  Verification of parameter version
+    if (param.get<bool>("version")) {
+        std::cout <<  param.version();
+        return -1;
     }
-    while (*is) {
-      tagger.parse_stream(is.get(), os.get());
+//  Verification of parameter help
+    if (param.get<bool>("help")) {
+        std::cout <<  param.help();
+        return -1;
     }
-  }
+//  New Tagger instance
+    CRFPP::TaggerImpl tagger;
+    if (!tagger.open(param)) {
+        std::cerr << tagger.what() << std::endl;
+        return -1;
+    }
 
-  return 0;
+    std::string output = param.get<std::string>("output");
+    if (output.empty()) {
+        output = "-";
+    }
+
+    CRFPP::ostream_wrapper os(output.c_str());
+    if (!*os) {
+        std::cerr << "no such file or directory: " << output << std::endl;
+        return -1;
+    }
+
+    const std::vector<std::string>& rest_ = param.rest_args();
+    std::vector<std::string> rest = rest_;  // trivial copy
+    if (rest.empty()) {
+        rest.push_back("-");
+    }
+
+    for (size_t i = 0; i < rest.size(); ++i) {
+        CRFPP::istream_wrapper is(rest[i].c_str());
+        if (!*is) {
+            std::cerr << "no such file or directory: " << rest[i] << std::endl;
+            return -1;
+        }
+        while (*is) {
+            tagger.parse_stream(is.get(), os.get());
+        }
+    }
+    return 0;
 }
 }  // namepace
 }  // namespace CRFPP
